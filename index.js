@@ -27,11 +27,18 @@ async function run() {
     await client.connect();
     const coffeesCollection = client.db('espressoEmporiumDB').collection('coffees')
 
+    app.get('/coffees', async(req, res) => {
+        const cursor = coffeesCollection.find();
+        const result = await cursor.toArray()
+        res.send(result);
+    })
+
     app.post('/coffees', async(req, res) => {
         const data = req.body;
         const result = await coffeesCollection.insertOne(data);
         res.send(result)
     })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
